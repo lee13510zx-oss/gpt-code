@@ -14,10 +14,36 @@ const DATA = window.KS_DATA || {
 
 const state = {
   result: null,
-  theme: localStorage.getItem("ks_theme") || "light"
+  theme: storageGet("ks_theme") || "light"
 };
 
 const $ = (id) => document.getElementById(id);
+
+function storageGet(key, fallback = "") {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function storageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function storageRemove(key) {
+  try {
+    localStorage.removeItem(key);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 function init() {
   document.documentElement.dataset.theme = state.theme;
@@ -256,8 +282,8 @@ function runSelfCheck() {
 function storageAvailable() {
   try {
     const key = "ks_self_check";
-    localStorage.setItem(key, "ok");
-    localStorage.removeItem(key);
+    storageSet(key, "ok");
+    storageRemove(key);
     return true;
   } catch {
     return false;
@@ -686,7 +712,7 @@ function saveCurrent() {
     summary: state.result.summary,
     createdAt: new Date().toLocaleString("ko-KR")
   });
-  localStorage.setItem("ks_library", JSON.stringify(items.slice(0, 40)));
+  storageSet("ks_library", JSON.stringify(items.slice(0, 40)));
   renderLibrary();
   switchView("library");
 }
@@ -711,7 +737,7 @@ function handleMistakeSave(event) {
     lastReviewedAt: "",
     createdAt: new Date().toLocaleString("ko-KR")
   });
-  localStorage.setItem("ks_mistakes", JSON.stringify(items.slice(0, 80)));
+  storageSet("ks_mistakes", JSON.stringify(items.slice(0, 80)));
   renderMistakes();
   button.textContent = "저장됨";
 }
@@ -760,7 +786,7 @@ function downloadCurrent() {
 
 function getLibrary() {
   try {
-    return JSON.parse(localStorage.getItem("ks_library") || "[]");
+    return JSON.parse(storageGet("ks_library", "[]"));
   } catch {
     return [];
   }
@@ -768,7 +794,7 @@ function getLibrary() {
 
 function getMistakes() {
   try {
-    return JSON.parse(localStorage.getItem("ks_mistakes") || "[]");
+    return JSON.parse(storageGet("ks_mistakes", "[]"));
   } catch {
     return [];
   }
@@ -790,7 +816,7 @@ function renderLibrary() {
 }
 
 function clearLibrary() {
-  localStorage.removeItem("ks_library");
+  storageRemove("ks_library");
   renderLibrary();
 }
 
@@ -824,45 +850,45 @@ function handleMistakeAction(event) {
       ? { ...item, reviewCount: Number(item.reviewCount || 0) + 1, lastReviewedAt: new Date().toLocaleString("ko-KR") }
       : item
     );
-    localStorage.setItem("ks_mistakes", JSON.stringify(next));
+    storageSet("ks_mistakes", JSON.stringify(next));
   }
   if (removeButton) {
     const id = Number(removeButton.dataset.mistakeRemove);
-    localStorage.setItem("ks_mistakes", JSON.stringify(items.filter((item) => item.id !== id)));
+    storageSet("ks_mistakes", JSON.stringify(items.filter((item) => item.id !== id)));
   }
   renderMistakes();
 }
 
 function clearMistakes() {
-  localStorage.removeItem("ks_mistakes");
+  storageRemove("ks_mistakes");
   renderMistakes();
 }
 
 function loadSettings() {
-  $("apiKey").value = localStorage.getItem("ks_gemini_key") || "";
-  $("modelName").value = localStorage.getItem("ks_gemini_model") || "gemini-3.1-flash-lite";
+  $("apiKey").value = storageGet("ks_gemini_key");
+  $("modelName").value = storageGet("ks_gemini_model", "gemini-3.1-flash-lite");
 }
 
 function saveSettings() {
   const key = $("apiKey").value.trim();
-  if (key) localStorage.setItem("ks_gemini_key", key);
-  localStorage.setItem("ks_gemini_model", $("modelName").value);
+  if (key) storageSet("ks_gemini_key", key);
+  storageSet("ks_gemini_model", $("modelName").value);
   alert("설정을 저장했습니다. 다음 생성부터 Gemini 요청을 시도합니다.");
 }
 
 function forgetSettings() {
-  localStorage.removeItem("ks_gemini_key");
+  storageRemove("ks_gemini_key");
   $("apiKey").value = "";
 }
 
 function toggleTheme() {
   state.theme = state.theme === "dark" ? "light" : "dark";
-  localStorage.setItem("ks_theme", state.theme);
+  storageSet("ks_theme", state.theme);
   document.documentElement.dataset.theme = state.theme;
 }
 
 async function requestGemini(base) {
-  const model = localStorage.getItem("ks_gemini_model") || "gemini-3.1-flash-lite";
+  const model = storageGet("ks_gemini_model", "gemini-3.1-flash-lite");
   const prompt = [
     "너는 한국 초중고 교육과정 기반 학습 요약 도우미다.",
     "저작권 있는 교과서 원문을 재현하지 말고, 사용자가 준 범위와 공개 가능한 일반 개념 중심으로 요약한다.",
@@ -879,7 +905,7 @@ async function requestGemini(base) {
   const serverResponse = await requestGeminiViaFunction(prompt, model);
   if (serverResponse) return serverResponse;
 
-  const apiKey = localStorage.getItem("ks_gemini_key");
+  const apiKey = storageGet("ks_gemini_key");
   if (!apiKey) return null;
 
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`, {
