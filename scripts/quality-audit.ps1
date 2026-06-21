@@ -39,7 +39,8 @@ $requiredFiles = @(
   "data/data-manifest.js", "data/education-data.js", "netlify/functions/gemini.js",
   "README.md", "docs/data-policy.md", "docs/deferred-approvals.md", "docs/deploy-checklist.md",
   "docs/qa-checklist.md", "docs/final-handoff.md", "docs/ui-interaction-report.md",
-  "docs/browser-runtime-report.md", "scripts/ui-interaction-audit.ps1", "scripts/browser-runtime-audit.ps1"
+  "docs/browser-runtime-report.md", "docs/operations-risk-report.md",
+  "scripts/ui-interaction-audit.ps1", "scripts/browser-runtime-audit.ps1", "scripts/operations-risk-audit.ps1"
 )
 
 $missing = @($requiredFiles | Where-Object { -not (Test-Path -LiteralPath (Join-Path $root $_)) })
@@ -50,8 +51,10 @@ $subjectCount = Count-UniqueMatches $data '"([^"]+)"'
 $profileCount = Count-UniqueMatches $data '"([^"]+)"\s*:\s*\{\s*domains:'
 $uiReportPath = Join-Path $docs "ui-interaction-report.md"
 $browserReportPath = Join-Path $docs "browser-runtime-report.md"
+$operationsReportPath = Join-Path $docs "operations-risk-report.md"
 $uiReport = if (Test-Path -LiteralPath $uiReportPath) { Get-Content -Encoding UTF8 -Raw $uiReportPath } else { "" }
 $browserReport = if (Test-Path -LiteralPath $browserReportPath) { Get-Content -Encoding UTF8 -Raw $browserReportPath } else { "" }
+$operationsReport = if (Test-Path -LiteralPath $operationsReportPath) { Get-Content -Encoding UTF8 -Raw $operationsReportPath } else { "" }
 
 Add-Score $rows "reliability" "required files" 4 ($missing.Count -eq 0) "$($requiredFiles.Count - $missing.Count)/$($requiredFiles.Count) files"
 Add-Score $rows "reliability" "safe storage wrappers" 4 ((Test-Text $app "function storageGet") -and (Test-Text $app "function storageSet") -and (Test-Text $app "function storageRemove")) "storage wrappers"
@@ -88,10 +91,11 @@ Add-Score $rows "risk" "deferred approvals" 3 (Test-Path -LiteralPath (Join-Path
 Add-Score $rows "risk" "free-first principle" 2 ((Test-Path -LiteralPath (Join-Path $docs "free-growth-roadmap.md")) -and (Test-Path -LiteralPath (Join-Path $docs "deferred-approvals.md"))) "free docs"
 Add-Score $rows "risk" "no obvious secret key" 2 (-not (Test-Text ($index + $app + $data) 'AIza[0-9A-Za-z_-]{20,}')) "no Gemini key"
 
-Add-Score $rows "growth" "free roadmap" 3 (Test-Path -LiteralPath (Join-Path $docs "free-growth-roadmap.md")) "roadmap"
-Add-Score $rows "growth" "premium candidates" 3 ((Get-Item -LiteralPath (Join-Path $docs "free-growth-roadmap.md")).Length -gt 500) "future paid roadmap"
+Add-Score $rows "growth" "free roadmap" 2 (Test-Path -LiteralPath (Join-Path $docs "free-growth-roadmap.md")) "roadmap"
+Add-Score $rows "growth" "premium candidates" 2 ((Get-Item -LiteralPath (Join-Path $docs "free-growth-roadmap.md")).Length -gt 500) "future paid roadmap"
 Add-Score $rows "growth" "retention features" 2 ((Test-Text $app 'ks_library') -and (Test-Text $app 'ks_mistakes')) "library/mistakes"
 Add-Score $rows "growth" "solo student friendly" 2 (-not (Test-Path -LiteralPath (Join-Path $root "package.json"))) "no build/deps"
+Add-Score $rows "growth" "operations risk audit" 2 (($operationsReport -match 'Result: PASS') -and ($operationsReport -match '500000 free-operation scenarios')) "500000 free-operation scenarios"
 
 $score = ($rows | Where-Object { $_.Pass } | Measure-Object -Property Points -Sum).Sum
 $maxScore = ($rows | Measure-Object -Property Points -Sum).Sum
