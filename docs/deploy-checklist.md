@@ -9,6 +9,8 @@
 - Netlify Functions 폴더
 - Gemini API 키를 환경변수로 숨기는 함수 구조
 - 키가 없어도 샘플 데이터로 작동하는 fallback
+- CSP, Permissions-Policy 등 기본 보안 헤더
+- 배포 사전검사 리포트 `docs/deployment-preflight-report.md`
 - 배포 후 확인할 README
 
 ## 나중에 승인받고 해야 할 일
@@ -37,6 +39,20 @@
 - Gemini 키가 없을 때도 샘플 데이터로 결과가 나온다.
 - Gemini 키가 있을 때 AI 응답이 반영된다.
 - 모바일 화면에서 하단 내비게이션이 겹치지 않는다.
+
+## 배포 전 자동 점검
+
+배포 직전 로컬에서 아래 스크립트를 실행해 Netlify 설정, 함수 경로, 보안 헤더, 키 없는 fallback을 확인한다.
+
+```powershell
+.\scripts\deployment-preflight-audit.ps1 -Iterations 500000 -MinimumScore 85
+```
+
+통과 기준:
+
+- Deployment score 85점 이상
+- 500,000개 배포 시나리오 실패 0회
+- `docs/deployment-preflight-report.md`에 `Result: PASS` 기록
 
 ## 무료 한도 관련 주의
 
