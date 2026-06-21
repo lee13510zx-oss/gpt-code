@@ -1,0 +1,10 @@
+{
+  "name": "koreastudy",
+  "short_name": "koreastudy",
+  "description": "무료 초중고 AI 학습 정리 웹앱",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6f7f4",
+  "theme_color": "#246b5b",
+  "lang": "ko"
+}
