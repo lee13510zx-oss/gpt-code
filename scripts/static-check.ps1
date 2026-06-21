@@ -17,8 +17,10 @@ $requiredFiles = @(
   "docs/final-handoff.md",
   "docs/quality-report.md",
   "docs/ui-interaction-report.md",
+  "docs/browser-runtime-report.md",
   "scripts/quality-audit.ps1",
-  "scripts/ui-interaction-audit.ps1"
+  "scripts/ui-interaction-audit.ps1",
+  "scripts/browser-runtime-audit.ps1"
 )
 
 $missing = @()
@@ -36,6 +38,8 @@ $hasQualityAudit = Test-Path -LiteralPath (Join-Path $root "scripts/quality-audi
 $hasQualityReport = Test-Path -LiteralPath (Join-Path $root "docs/quality-report.md")
 $hasUiAudit = Test-Path -LiteralPath (Join-Path $root "scripts/ui-interaction-audit.ps1")
 $hasUiReport = Test-Path -LiteralPath (Join-Path $root "docs/ui-interaction-report.md")
+$hasBrowserAudit = Test-Path -LiteralPath (Join-Path $root "scripts/browser-runtime-audit.ps1")
+$hasBrowserReport = Test-Path -LiteralPath (Join-Path $root "docs/browser-runtime-report.md")
 
 $checks = @(
   @{ Name = "Required files"; Pass = ($missing.Count -eq 0); Detail = if ($missing.Count) { "Missing: $($missing -join ', ')" } else { "All present" } },
@@ -45,7 +49,8 @@ $checks = @(
   @{ Name = "Approval dashboard"; Pass = ($data.Contains("finalApprovals") -and $index.Contains("approvalPanel")); Detail = "Final approvals" },
   @{ Name = "Mistake note"; Pass = ($app.Contains("ks_mistakes") -and $index.Contains("mistakeList")); Detail = "Mistake note storage" },
   @{ Name = "Quality audit"; Pass = ($hasQualityAudit -and $hasQualityReport); Detail = "Quality score and simulation" },
-  @{ Name = "UI interaction audit"; Pass = ($hasUiAudit -and $hasUiReport); Detail = "Touch and navigation simulation" }
+  @{ Name = "UI interaction audit"; Pass = ($hasUiAudit -and $hasUiReport); Detail = "Touch and navigation simulation" },
+  @{ Name = "Browser runtime audit"; Pass = ($hasBrowserAudit -and $hasBrowserReport); Detail = "Real browser runtime simulation" }
 )
 
 foreach ($check in $checks) {
