@@ -43,18 +43,22 @@
 - UI 상호작용 리포트 `docs/ui-interaction-report.md` 생성
 - 실제 Chrome/Edge headless 브라우저 런타임 검사 스크립트 `scripts/browser-runtime-audit.ps1` 추가
 - 실제 브라우저 런타임 리포트 `docs/browser-runtime-report.md` 생성
+- 사용자 수, 수익성, 무료 운영 리스크 검사 스크립트 `scripts/operations-risk-audit.ps1` 추가
+- 운영·성장성 리포트 `docs/operations-risk-report.md` 생성
 - 동적 버튼, 탐색 결과, 하단 내비게이션 터치 목표를 44px 이상으로 보강
 - 100,000회 시뮬레이션 통과: 100/100점, 실패 0회, 85점 이상 10/10회 연속
 - 500,000회 시뮬레이션 통과: 100/100점, 실패 0회, 85점 이상 10/10회 연속
 - UI 상호작용 500,000회 시뮬레이션 통과: 100/100점, 실패 0회
 - 실제 브라우저 클릭 100,000회 시뮬레이션 통과: 100/100점, 실패 0회
+- 운영·성장성 500,000개 시나리오 통과: 100/100점, 실패 0회
 - 품질 점수 검사에 UI 상호작용 산출물을 포함한 뒤 재검증 통과
 - 품질 점수 검사에 실제 브라우저 런타임 산출물을 포함한 뒤 재검증 통과
-- 정적 검사 통과: required files, data load order, Gemini function path, self-check, approval dashboard, mistake note, quality audit, UI interaction audit, browser runtime audit
+- 품질 점수 검사에 운영·성장성 산출물을 포함한 뒤 재검증 통과
+- 정적 검사 통과: required files, data load order, Gemini function path, self-check, approval dashboard, mistake note, quality audit, UI interaction audit, browser runtime audit, operations risk audit
 
 ## 현재 제한
 
-- 무료 범위 안에서 만든 로컬 정적 검사, 구조 시뮬레이션, 실제 headless 브라우저 런타임 검사는 통과했지만, 실제 Netlify 배포 URL에서 브라우저 시각 QA는 아직 보류 중
+- 무료 범위 안에서 만든 로컬 정적 검사, 구조 시뮬레이션, 실제 headless 브라우저 런타임 검사, 운영·성장성 리스크 검사는 통과했지만, 실제 Netlify 배포 URL에서 브라우저 시각 QA는 아직 보류 중
 - 실제 50만 사용자 트래픽 부하 테스트는 무료 개인 계정에서 수행하지 않음
 - 교과서 전문, 시중 시험지 원문, 모의고사 원문 등 저작권 허가가 필요한 자료는 포함하지 않음
 - Gemini API는 사용자가 키를 발급할 수 있을 때만 선택적으로 연결 가능하며, 현재 기본 앱은 무키/무료 규칙 기반으로 동작
