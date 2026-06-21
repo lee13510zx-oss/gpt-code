@@ -1,6 +1,6 @@
 # koreastudy quality score report
 
-- Generated at: 2026-06-22 00:38:04
+- Generated at: 2026-06-22 00:54:13
 - Total score: 100 / 100
 - Target: at least 85 points, 10 consecutive passes
 - Consecutive scores: 100, 100, 100, 100, 100, 100, 100, 100, 100, 100
@@ -29,11 +29,12 @@ Common market apps are treated as 50 points and stable large apps as 70 points. 
 |content|question categories|3|PASS|4 categories|
 |content|unit seeds|2|PASS|unit seeds|
 |ux|responsive layout|4|PASS|breakpoints|
-|ux|touch targets|4|PASS|button heights|
+|ux|touch targets|4|PASS|44px minimum|
 |ux|dark mode|3|PASS|theme|
 |ux|print support|3|PASS|print|
-|ux|worksheet download|3|PASS|worksheet/download|
-|ux|bottom navigation|3|PASS|nav|
+|ux|worksheet download|2|PASS|worksheet/download|
+|ux|bottom navigation|2|PASS|nav|
+|ux|UI interaction audit|2|PASS|500000 UI interactions|
 |deployment|Netlify config|4|PASS|netlify.toml|
 |deployment|buildless static deploy|3|PASS|publish root|
 |deployment|function path|3|PASS|function|
