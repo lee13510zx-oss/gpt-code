@@ -1,6 +1,6 @@
 # koreastudy quality score report
 
-- Generated at: 2026-06-22 01:34:30
+- Generated at: 2026-06-22 08:46:02
 - Total score: 100 / 100
 - Target: at least 85 points, 10 consecutive passes
 - Consecutive scores: 100, 100, 100, 100, 100, 100, 100, 100, 100, 100
@@ -15,7 +15,7 @@ Common market apps are treated as 50 points and stable large apps as 70 points. 
 
 |Category|Item|Points|Result|Evidence|
 |---|---:|---:|---|---|
-|reliability|required files|4|PASS|18/18 files|
+|reliability|required files|4|PASS|20/20 files|
 |reliability|safe storage wrappers|4|PASS|storage wrappers|
 |reliability|escaped HTML output|4|PASS|80 uses|
 |reliability|AI no-key fallback|4|PASS|Gemini optional|
@@ -45,10 +45,11 @@ Common market apps are treated as 50 points and stable large apps as 70 points. 
 |risk|deferred approvals|3|PASS|approvals doc|
 |risk|free-first principle|2|PASS|free docs|
 |risk|no obvious secret key|2|PASS|no Gemini key|
-|growth|free roadmap|3|PASS|roadmap|
-|growth|premium candidates|3|PASS|future paid roadmap|
+|growth|free roadmap|2|PASS|roadmap|
+|growth|premium candidates|2|PASS|future paid roadmap|
 |growth|retention features|2|PASS|library/mistakes|
 |growth|solo student friendly|2|PASS|no build/deps|
+|growth|operations risk audit|2|PASS|500000 free-operation scenarios|
 
 ## Failed items
 
