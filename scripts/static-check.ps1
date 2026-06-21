@@ -14,7 +14,9 @@ $requiredFiles = @(
   "docs/deferred-approvals.md",
   "docs/deploy-checklist.md",
   "docs/qa-checklist.md",
-  "docs/final-handoff.md"
+  "docs/final-handoff.md",
+  "docs/quality-report.md",
+  "scripts/quality-audit.ps1"
 )
 
 $missing = @()
@@ -28,6 +30,8 @@ foreach ($file in $requiredFiles) {
 $index = Get-Content -Encoding UTF8 -Raw (Join-Path $root "index.html")
 $app = Get-Content -Encoding UTF8 -Raw (Join-Path $root "app.js")
 $data = Get-Content -Encoding UTF8 -Raw (Join-Path $root "data/education-data.js")
+$hasQualityAudit = Test-Path -LiteralPath (Join-Path $root "scripts/quality-audit.ps1")
+$hasQualityReport = Test-Path -LiteralPath (Join-Path $root "docs/quality-report.md")
 
 $checks = @(
   @{ Name = "Required files"; Pass = ($missing.Count -eq 0); Detail = if ($missing.Count) { "Missing: $($missing -join ', ')" } else { "All present" } },
@@ -35,7 +39,8 @@ $checks = @(
   @{ Name = "Gemini function path"; Pass = ($app.Contains("/.netlify/functions/gemini")); Detail = "Function fallback" },
   @{ Name = "Self-check feature"; Pass = ($app.Contains("runSelfCheck") -and $index.Contains("selfCheckPanel")); Detail = "QA self-check" },
   @{ Name = "Approval dashboard"; Pass = ($data.Contains("finalApprovals") -and $index.Contains("approvalPanel")); Detail = "Final approvals" },
-  @{ Name = "Mistake note"; Pass = ($app.Contains("ks_mistakes") -and $index.Contains("mistakeList")); Detail = "Mistake note storage" }
+  @{ Name = "Mistake note"; Pass = ($app.Contains("ks_mistakes") -and $index.Contains("mistakeList")); Detail = "Mistake note storage" },
+  @{ Name = "Quality audit"; Pass = ($hasQualityAudit -and $hasQualityReport); Detail = "Quality score and simulation" }
 )
 
 foreach ($check in $checks) {
@@ -46,4 +51,3 @@ foreach ($check in $checks) {
 if ($checks | Where-Object { -not $_.Pass }) {
   exit 1
 }
-
