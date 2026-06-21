@@ -102,7 +102,9 @@ $requiredFiles = @(
   "docs/deferred-approvals.md",
   "docs/deploy-checklist.md",
   "docs/qa-checklist.md",
-  "docs/final-handoff.md"
+  "docs/final-handoff.md",
+  "docs/ui-interaction-report.md",
+  "scripts/ui-interaction-audit.ps1"
 )
 
 $missing = @($requiredFiles | Where-Object { -not (Test-Path -LiteralPath (Join-Path $root $_)) })
@@ -148,7 +150,7 @@ Add-Score $rows "content" "unit seeds" 2 ($hasUnitSeeds -and $hasManySeedArrays)
 $hasBreakpoint860 = Test-Text $styles "@media \(max-width: 860px\)"
 $hasBreakpoint540 = Test-Text $styles "@media \(max-width: 540px\)"
 $hasTouch44 = Test-Text $styles "min-height:\s*44px"
-$hasTouch40 = Test-Text $styles "min-height:\s*40px"
+$hasNoSmallTouchTarget = -not (Test-Text $styles "min-height:\s*(3[0-9]|4[0-3])px")
 $hasDarkCss = Test-Text $styles '\[data-theme="dark"\]'
 $hasThemeToggle = Test-Text $app "toggleTheme"
 $hasPrintCss = Test-Text $styles "@media print"
@@ -157,13 +159,18 @@ $hasWorksheet = Test-Text $app "renderWorksheet"
 $hasDownload = Test-Text $app "downloadCurrent"
 $hasBottomNavCss = Test-Text $styles "\.bottom-nav"
 $hasBottomNavHtml = Test-Text $index "bottom-nav"
+$hasUiAudit = Test-Path -LiteralPath (Join-Path $root "scripts/ui-interaction-audit.ps1")
+$hasUiReport = Test-Path -LiteralPath (Join-Path $root "docs/ui-interaction-report.md")
+$uiReport = if ($hasUiReport) { Get-Content -Encoding UTF8 -Raw (Join-Path $root "docs/ui-interaction-report.md") } else { "" }
+$hasUiPass = ($uiReport -match 'Result: PASS' -and $uiReport -match '500000 iterations, 0 failures')
 
 Add-Score $rows "ux" "responsive layout" 4 ($hasBreakpoint860 -and $hasBreakpoint540) "breakpoints"
-Add-Score $rows "ux" "touch targets" 4 ($hasTouch44 -and $hasTouch40) "button heights"
+Add-Score $rows "ux" "touch targets" 4 ($hasTouch44 -and $hasNoSmallTouchTarget) "44px minimum"
 Add-Score $rows "ux" "dark mode" 3 ($hasDarkCss -and $hasThemeToggle) "theme"
 Add-Score $rows "ux" "print support" 3 ($hasPrintCss -and $hasPrintButton) "print"
-Add-Score $rows "ux" "worksheet download" 3 ($hasWorksheet -and $hasDownload) "worksheet/download"
-Add-Score $rows "ux" "bottom navigation" 3 ($hasBottomNavCss -and $hasBottomNavHtml) "nav"
+Add-Score $rows "ux" "worksheet download" 2 ($hasWorksheet -and $hasDownload) "worksheet/download"
+Add-Score $rows "ux" "bottom navigation" 2 ($hasBottomNavCss -and $hasBottomNavHtml) "nav"
+Add-Score $rows "ux" "UI interaction audit" 2 ($hasUiAudit -and $hasUiPass) "500000 UI interactions"
 
 $hasPublishRoot = Test-Text $netlify 'publish\s*=\s*"."'
 $hasNoPackageJson = -not (Test-Path -LiteralPath (Join-Path $root "package.json"))
