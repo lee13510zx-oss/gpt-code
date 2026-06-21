@@ -94,7 +94,9 @@ h2 {
 .primary-button,
 .secondary-button,
 .tab,
-.bottom-nav button {
+.bottom-nav button,
+.answer-toggle,
+.explore-item {
   border: 1px solid var(--line);
   border-radius: 8px;
   min-height: 44px;
@@ -639,7 +641,7 @@ th {
 }
 
 .bottom-nav button {
-  min-height: 42px;
+  min-height: 44px;
   font-size: 13px;
 }
 
@@ -742,7 +744,7 @@ th {
 
   .bottom-nav button {
     min-width: 0;
-    min-height: 40px;
+    min-height: 44px;
     font-size: 11px;
     padding: 4px;
   }
