@@ -35,6 +35,8 @@ body {
   font-family: Inter, Pretendard, "Segoe UI", system-ui, -apple-system, sans-serif;
   background: var(--bg);
   color: var(--text);
+  line-height: 1.5;
+  color-scheme: light dark;
 }
 
 button,
@@ -46,6 +48,31 @@ textarea {
 
 button {
   cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  z-index: 100;
+  transform: translateY(-160%);
+  border: 1px solid var(--brand);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--brand);
+  padding: 10px 12px;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
 .app-shell {
