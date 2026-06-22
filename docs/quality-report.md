@@ -1,6 +1,6 @@
 # koreastudy quality score report
 
-- Generated at: 2026-06-22 08:46:02
+- Generated at: 2026-06-22 08:55:33
 - Total score: 100 / 100
 - Target: at least 85 points, 10 consecutive passes
 - Consecutive scores: 100, 100, 100, 100, 100, 100, 100, 100, 100, 100
@@ -15,7 +15,7 @@ Common market apps are treated as 50 points and stable large apps as 70 points. 
 
 |Category|Item|Points|Result|Evidence|
 |---|---:|---:|---|---|
-|reliability|required files|4|PASS|20/20 files|
+|reliability|required files|4|PASS|22/22 files|
 |reliability|safe storage wrappers|4|PASS|storage wrappers|
 |reliability|escaped HTML output|4|PASS|80 uses|
 |reliability|AI no-key fallback|4|PASS|Gemini optional|
@@ -36,11 +36,12 @@ Common market apps are treated as 50 points and stable large apps as 70 points. 
 |ux|bottom navigation|2|PASS|nav|
 |ux|UI interaction audit|1|PASS|500000 UI interactions|
 |ux|browser runtime audit|1|PASS|100000 real browser clicks|
-|deployment|Netlify config|4|PASS|netlify.toml|
+|deployment|Netlify config|3|PASS|netlify.toml|
 |deployment|buildless static deploy|3|PASS|publish root|
 |deployment|function path|3|PASS|function|
-|deployment|security headers|3|PASS|headers|
+|deployment|security headers|2|PASS|headers|
 |deployment|manifest linked|2|PASS|manifest|
+|deployment|deployment preflight audit|2|PASS|500000 deployment scenarios|
 |risk|copyright policy|3|PASS|policy|
 |risk|deferred approvals|3|PASS|approvals doc|
 |risk|free-first principle|2|PASS|free docs|
