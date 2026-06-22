@@ -73,3 +73,14 @@
 - Netlify 실제 배포 URL 확인
 - 실제 배포 URL에서 모바일/데스크톱 브라우저 수동 QA
 - 무료 공개 데이터만 사용한 과목별 학습 데이터 추가 확장
+
+## 2026-06-22 accessibility and visual audit update
+
+- Added `scripts/accessibility-visual-audit.ps1`.
+- Added `docs/accessibility-visual-report.md`.
+- Added a skip link, visible focus style, table header scope attributes, and a named footer navigation region.
+- Added the accessibility visual audit to `scripts/static-check.ps1`.
+- Added the accessibility visual audit to `scripts/quality-audit.ps1` while keeping the score model at 100 total points.
+- Accessibility/visual audit result: 100/100, 500000 accessibility scenarios, 0 failures.
+- Quality audit result after the new gate: 100/100, 500000 iterations, 0 failures, 10/10 consecutive scores above 85.
+- Static check result after the new gate: all checks PASS, including accessibility visual audit.
