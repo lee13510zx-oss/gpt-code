@@ -84,3 +84,14 @@
 - Accessibility/visual audit result: 100/100, 500000 accessibility scenarios, 0 failures.
 - Quality audit result after the new gate: 100/100, 500000 iterations, 0 failures, 10/10 consecutive scores above 85.
 - Static check result after the new gate: all checks PASS, including accessibility visual audit.
+
+## 2026-06-22 performance and resilience audit update
+
+- Added `scripts/performance-resilience-audit.ps1`.
+- Added `docs/performance-resilience-report.md`.
+- Checked buildless static runtime, bundle size, app/script size, local data structure, optional AI fallback, storage resilience, offline-first local generation, client-side export/print, layout stability, remote asset dependency, security headers, and mobile persistence.
+- Added the performance resilience audit to `scripts/static-check.ps1`.
+- Added the performance resilience audit to `scripts/quality-audit.ps1` while keeping the score model at 100 total points.
+- Performance/resilience audit result: 100/100, 94.24 KB runtime bundle, 500000 scenarios, 0 failures.
+- Quality audit result after the new gate: 100/100, 500000 iterations, 0 failures, 10/10 consecutive scores above 85.
+- Static check result after the new gate: all checks PASS, including performance resilience audit.
