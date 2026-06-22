@@ -39,22 +39,20 @@ $requiredFiles = @(
   "data/data-manifest.js", "data/education-data.js", "netlify/functions/gemini.js",
   "README.md", "docs/data-policy.md", "docs/deferred-approvals.md", "docs/deploy-checklist.md",
   "docs/qa-checklist.md", "docs/final-handoff.md", "docs/ui-interaction-report.md",
-  "docs/browser-runtime-report.md", "docs/operations-risk-report.md",
-  "scripts/ui-interaction-audit.ps1", "scripts/browser-runtime-audit.ps1", "scripts/operations-risk-audit.ps1"
+  "docs/browser-runtime-report.md", "docs/operations-risk-report.md", "docs/deployment-preflight-report.md",
+  "scripts/ui-interaction-audit.ps1", "scripts/browser-runtime-audit.ps1", "scripts/operations-risk-audit.ps1",
+  "scripts/deployment-preflight-audit.ps1"
 )
 
 $missing = @($requiredFiles | Where-Object { -not (Test-Path -LiteralPath (Join-Path $root $_)) })
 $rows = New-Object System.Collections.Generic.List[object]
-
 $schoolCount = Count-UniqueMatches $data 'school:\s*"([^"]+)"'
 $subjectCount = Count-UniqueMatches $data '"([^"]+)"'
 $profileCount = Count-UniqueMatches $data '"([^"]+)"\s*:\s*\{\s*domains:'
-$uiReportPath = Join-Path $docs "ui-interaction-report.md"
-$browserReportPath = Join-Path $docs "browser-runtime-report.md"
-$operationsReportPath = Join-Path $docs "operations-risk-report.md"
-$uiReport = if (Test-Path -LiteralPath $uiReportPath) { Get-Content -Encoding UTF8 -Raw $uiReportPath } else { "" }
-$browserReport = if (Test-Path -LiteralPath $browserReportPath) { Get-Content -Encoding UTF8 -Raw $browserReportPath } else { "" }
-$operationsReport = if (Test-Path -LiteralPath $operationsReportPath) { Get-Content -Encoding UTF8 -Raw $operationsReportPath } else { "" }
+$uiReport = if (Test-Path -LiteralPath (Join-Path $docs "ui-interaction-report.md")) { Get-Content -Encoding UTF8 -Raw (Join-Path $docs "ui-interaction-report.md") } else { "" }
+$browserReport = if (Test-Path -LiteralPath (Join-Path $docs "browser-runtime-report.md")) { Get-Content -Encoding UTF8 -Raw (Join-Path $docs "browser-runtime-report.md") } else { "" }
+$operationsReport = if (Test-Path -LiteralPath (Join-Path $docs "operations-risk-report.md")) { Get-Content -Encoding UTF8 -Raw (Join-Path $docs "operations-risk-report.md") } else { "" }
+$deploymentReport = if (Test-Path -LiteralPath (Join-Path $docs "deployment-preflight-report.md")) { Get-Content -Encoding UTF8 -Raw (Join-Path $docs "deployment-preflight-report.md") } else { "" }
 
 Add-Score $rows "reliability" "required files" 4 ($missing.Count -eq 0) "$($requiredFiles.Count - $missing.Count)/$($requiredFiles.Count) files"
 Add-Score $rows "reliability" "safe storage wrappers" 4 ((Test-Text $app "function storageGet") -and (Test-Text $app "function storageSet") -and (Test-Text $app "function storageRemove")) "storage wrappers"
@@ -80,11 +78,12 @@ Add-Score $rows "ux" "bottom navigation" 2 ((Test-Text $styles '\.bottom-nav') -
 Add-Score $rows "ux" "UI interaction audit" 1 (($uiReport -match 'Result: PASS') -and ($uiReport -match '500000 iterations, 0 failures')) "500000 UI interactions"
 Add-Score $rows "ux" "browser runtime audit" 1 (($browserReport -match 'Result: PASS') -and ($browserReport -match '100000 iterations')) "100000 real browser clicks"
 
-Add-Score $rows "deployment" "Netlify config" 4 (Test-Path -LiteralPath (Join-Path $root "netlify.toml")) "netlify.toml"
+Add-Score $rows "deployment" "Netlify config" 3 (Test-Path -LiteralPath (Join-Path $root "netlify.toml")) "netlify.toml"
 Add-Score $rows "deployment" "buildless static deploy" 3 ((Test-Text $netlify 'publish\s*=\s*"."') -and -not (Test-Path -LiteralPath (Join-Path $root "package.json"))) "publish root"
 Add-Score $rows "deployment" "function path" 3 ((Test-Path -LiteralPath (Join-Path $root "netlify/functions/gemini.js")) -and (Test-Text $app '/\.netlify/functions/gemini')) "function"
-Add-Score $rows "deployment" "security headers" 3 ((Test-Text $netlify 'X-Frame-Options') -and (Test-Text $netlify 'X-Content-Type-Options')) "headers"
+Add-Score $rows "deployment" "security headers" 2 ((Test-Text $netlify 'X-Frame-Options') -and (Test-Text $netlify 'X-Content-Type-Options')) "headers"
 Add-Score $rows "deployment" "manifest linked" 2 ((Test-Path -LiteralPath (Join-Path $root "manifest.webmanifest")) -and (Test-Text $index 'manifest.webmanifest')) "manifest"
+Add-Score $rows "deployment" "deployment preflight audit" 2 (($deploymentReport -match 'Result: PASS') -and ($deploymentReport -match '500000 deployment scenarios')) "500000 deployment scenarios"
 
 Add-Score $rows "risk" "copyright policy" 3 ((Test-Path -LiteralPath (Join-Path $docs "data-policy.md")) -and ((Get-Item -LiteralPath (Join-Path $docs "data-policy.md")).Length -gt 500)) "policy"
 Add-Score $rows "risk" "deferred approvals" 3 (Test-Path -LiteralPath (Join-Path $docs "deferred-approvals.md")) "approvals doc"
