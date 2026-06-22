@@ -1,6 +1,6 @@
 # koreastudy quality score report
 
-- Generated at: 2026-06-22 08:55:33
+- Generated at: 2026-06-22 09:09:47
 - Total score: 100 / 100
 - Target: at least 85 points, 10 consecutive passes
 - Consecutive scores: 100, 100, 100, 100, 100, 100, 100, 100, 100, 100
@@ -15,7 +15,7 @@ Common market apps are treated as 50 points and stable large apps as 70 points. 
 
 |Category|Item|Points|Result|Evidence|
 |---|---:|---:|---|---|
-|reliability|required files|4|PASS|22/22 files|
+|reliability|required files|4|PASS|24/24 files|
 |reliability|safe storage wrappers|4|PASS|storage wrappers|
 |reliability|escaped HTML output|4|PASS|80 uses|
 |reliability|AI no-key fallback|4|PASS|Gemini optional|
@@ -28,12 +28,13 @@ Common market apps are treated as 50 points and stable large apps as 70 points. 
 |content|curriculum versions|3|PASS|2015/2022|
 |content|question categories|3|PASS|4 categories|
 |content|unit seeds|2|PASS|unit seeds|
-|ux|responsive layout|4|PASS|breakpoints|
-|ux|touch targets|4|PASS|44px minimum|
+|ux|responsive layout|3|PASS|breakpoints|
+|ux|touch targets|3|PASS|44px minimum|
 |ux|dark mode|3|PASS|theme|
 |ux|print support|3|PASS|print|
 |ux|worksheet download|2|PASS|worksheet/download|
 |ux|bottom navigation|2|PASS|nav|
+|ux|accessibility visual audit|2|PASS|500000 accessibility scenarios|
 |ux|UI interaction audit|1|PASS|500000 UI interactions|
 |ux|browser runtime audit|1|PASS|100000 real browser clicks|
 |deployment|Netlify config|3|PASS|netlify.toml|
