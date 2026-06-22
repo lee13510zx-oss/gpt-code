@@ -1,6 +1,6 @@
 # koreastudy quality score report
 
-- Generated at: 2026-06-22 09:29:22
+- Generated at: 2026-06-22 14:43:17
 - Total score: 100 / 100
 - Target: at least 85 points, 10 consecutive passes
 - Consecutive scores: 100, 100, 100, 100, 100, 100, 100, 100, 100, 100
@@ -15,7 +15,7 @@ Common market apps are treated as 50 points and stable large apps as 70 points. 
 
 |Category|Item|Points|Result|Evidence|
 |---|---:|---:|---|---|
-|reliability|required files|4|PASS|26/26 files|
+|reliability|required files|4|PASS|28/28 files|
 |reliability|safe storage wrappers|4|PASS|storage wrappers|
 |reliability|escaped HTML output|4|PASS|80 uses|
 |reliability|AI no-key fallback|4|PASS|Gemini optional|
@@ -23,11 +23,12 @@ Common market apps are treated as 50 points and stable large apps as 70 points. 
 |reliability|stored JSON guarded|3|PASS|guarded parse|
 |reliability|static check script|3|PASS|static-check|
 |content|school levels|4|PASS|3 levels|
-|content|subject breadth|4|PASS|49 subjects|
-|content|subject profiles|4|PASS|43 profiles|
+|content|subject breadth|3|PASS|49 subjects|
+|content|subject profiles|3|PASS|43 profiles|
 |content|curriculum versions|3|PASS|2015/2022|
 |content|question categories|3|PASS|4 categories|
 |content|unit seeds|2|PASS|unit seeds|
+|content|content integrity audit|2|PASS|500000 content combinations|
 |ux|responsive layout|3|PASS|breakpoints|
 |ux|touch targets|3|PASS|44px minimum|
 |ux|dark mode|3|PASS|theme|
