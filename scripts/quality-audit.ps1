@@ -108,11 +108,13 @@ $requiredFiles = @(
   "docs/operations-risk-report.md",
   "docs/deployment-preflight-report.md",
   "docs/accessibility-visual-report.md",
+  "docs/performance-resilience-report.md",
   "scripts/ui-interaction-audit.ps1",
   "scripts/browser-runtime-audit.ps1",
   "scripts/operations-risk-audit.ps1",
   "scripts/deployment-preflight-audit.ps1",
-  "scripts/accessibility-visual-audit.ps1"
+  "scripts/accessibility-visual-audit.ps1",
+  "scripts/performance-resilience-audit.ps1"
 )
 
 $missing = @($requiredFiles | Where-Object { -not (Test-Path -LiteralPath (Join-Path $root $_)) })
@@ -187,6 +189,10 @@ $hasAccessibilityAudit = Test-Path -LiteralPath (Join-Path $root "scripts/access
 $hasAccessibilityReport = Test-Path -LiteralPath (Join-Path $root "docs/accessibility-visual-report.md")
 $accessibilityReport = if ($hasAccessibilityReport) { Get-Content -Encoding UTF8 -Raw (Join-Path $root "docs/accessibility-visual-report.md") } else { "" }
 $hasAccessibilityPass = ($accessibilityReport -match 'Result: PASS' -and $accessibilityReport -match '500000 accessibility scenarios')
+$hasPerformanceAudit = Test-Path -LiteralPath (Join-Path $root "scripts/performance-resilience-audit.ps1")
+$hasPerformanceReport = Test-Path -LiteralPath (Join-Path $root "docs/performance-resilience-report.md")
+$performanceReport = if ($hasPerformanceReport) { Get-Content -Encoding UTF8 -Raw (Join-Path $root "docs/performance-resilience-report.md") } else { "" }
+$hasPerformancePass = ($performanceReport -match 'Result: PASS' -and $performanceReport -match '500000 performance/resilience scenarios')
 
 Add-Score $rows "ux" "responsive layout" 3 ($hasBreakpoint860 -and $hasBreakpoint540) "breakpoints"
 Add-Score $rows "ux" "touch targets" 3 ($hasTouch44 -and $hasNoSmallTouchTarget) "44px minimum"
@@ -208,11 +214,12 @@ $hasManifestFile = Test-Path -LiteralPath (Join-Path $root "manifest.webmanifest
 $hasManifestLink = Test-Text $index "manifest.webmanifest"
 
 Add-Score $rows "deployment" "Netlify config" 3 (Test-Path -LiteralPath (Join-Path $root "netlify.toml")) "netlify.toml"
-Add-Score $rows "deployment" "buildless static deploy" 3 ($hasPublishRoot -and $hasNoPackageJson) "publish root"
+Add-Score $rows "deployment" "buildless static deploy" 2 ($hasPublishRoot -and $hasNoPackageJson) "publish root"
 Add-Score $rows "deployment" "function path" 3 ($hasFunctionFile -and $hasFunctionCall) "function"
 Add-Score $rows "deployment" "security headers" 2 ($hasFrameHeader -and $hasContentTypeHeader) "headers"
 Add-Score $rows "deployment" "manifest linked" 2 ($hasManifestFile -and $hasManifestLink) "manifest"
 Add-Score $rows "deployment" "deployment preflight audit" 2 ($hasDeploymentAudit -and $hasDeploymentPass) "500000 deployment scenarios"
+Add-Score $rows "deployment" "performance resilience audit" 2 ($hasPerformanceAudit -and $hasPerformancePass) "500000 performance/resilience scenarios"
 
 $hasDataPolicy = Test-Path -LiteralPath (Join-Path $docs "data-policy.md")
 $hasPolicySize = ((Get-Item -LiteralPath (Join-Path $docs "data-policy.md")).Length -gt 500)
@@ -234,7 +241,7 @@ $soloFriendly = -not (Test-Path -LiteralPath (Join-Path $root "package.json")) -
 Add-Score $rows "growth" "free roadmap" 2 $hasRoadmap "roadmap"
 Add-Score $rows "growth" "premium candidates" 2 $roadmapSize "future paid roadmap"
 Add-Score $rows "growth" "retention features" 2 ($hasLibraryStorage -and $hasMistakeStorage) "library/mistakes"
-Add-Score $rows "growth" "solo student friendly" 2 $soloFriendly "no build/deps"
+Add-Score $rows "growth" "solo student friendly" 1 $soloFriendly "no build/deps"
 Add-Score $rows "growth" "operations risk audit" 2 ($hasOperationsAudit -and $hasOperationsPass) "500000 free-operation scenarios"
 
 $score = ($rows | Where-Object { $_.Pass } | Measure-Object -Property Points -Sum).Sum
