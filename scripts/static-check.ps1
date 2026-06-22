@@ -20,11 +20,13 @@ $requiredFiles = @(
   "docs/browser-runtime-report.md",
   "docs/operations-risk-report.md",
   "docs/deployment-preflight-report.md",
+  "docs/accessibility-visual-report.md",
   "scripts/quality-audit.ps1",
   "scripts/ui-interaction-audit.ps1",
   "scripts/browser-runtime-audit.ps1",
   "scripts/operations-risk-audit.ps1",
-  "scripts/deployment-preflight-audit.ps1"
+  "scripts/deployment-preflight-audit.ps1",
+  "scripts/accessibility-visual-audit.ps1"
 )
 
 $missing = @()
@@ -48,6 +50,8 @@ $hasOperationsAudit = Test-Path -LiteralPath (Join-Path $root "scripts/operation
 $hasOperationsReport = Test-Path -LiteralPath (Join-Path $root "docs/operations-risk-report.md")
 $hasDeploymentAudit = Test-Path -LiteralPath (Join-Path $root "scripts/deployment-preflight-audit.ps1")
 $hasDeploymentReport = Test-Path -LiteralPath (Join-Path $root "docs/deployment-preflight-report.md")
+$hasAccessibilityAudit = Test-Path -LiteralPath (Join-Path $root "scripts/accessibility-visual-audit.ps1")
+$hasAccessibilityReport = Test-Path -LiteralPath (Join-Path $root "docs/accessibility-visual-report.md")
 
 $checks = @(
   @{ Name = "Required files"; Pass = ($missing.Count -eq 0); Detail = if ($missing.Count) { "Missing: $($missing -join ', ')" } else { "All present" } },
@@ -60,7 +64,8 @@ $checks = @(
   @{ Name = "UI interaction audit"; Pass = ($hasUiAudit -and $hasUiReport); Detail = "Touch and navigation simulation" },
   @{ Name = "Browser runtime audit"; Pass = ($hasBrowserAudit -and $hasBrowserReport); Detail = "Real browser runtime simulation" },
   @{ Name = "Operations risk audit"; Pass = ($hasOperationsAudit -and $hasOperationsReport); Detail = "Users, revenue, free-operation risk" },
-  @{ Name = "Deployment preflight audit"; Pass = ($hasDeploymentAudit -and $hasDeploymentReport); Detail = "Netlify and function deploy risk" }
+  @{ Name = "Deployment preflight audit"; Pass = ($hasDeploymentAudit -and $hasDeploymentReport); Detail = "Netlify and function deploy risk" },
+  @{ Name = "Accessibility visual audit"; Pass = ($hasAccessibilityAudit -and $hasAccessibilityReport); Detail = "Keyboard, labels, visual resilience" }
 )
 
 foreach ($check in $checks) {
