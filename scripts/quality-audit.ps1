@@ -109,12 +109,14 @@ $requiredFiles = @(
   "docs/deployment-preflight-report.md",
   "docs/accessibility-visual-report.md",
   "docs/performance-resilience-report.md",
+  "docs/content-integrity-report.md",
   "scripts/ui-interaction-audit.ps1",
   "scripts/browser-runtime-audit.ps1",
   "scripts/operations-risk-audit.ps1",
   "scripts/deployment-preflight-audit.ps1",
   "scripts/accessibility-visual-audit.ps1",
-  "scripts/performance-resilience-audit.ps1"
+  "scripts/performance-resilience-audit.ps1",
+  "scripts/content-integrity-audit.ps1"
 )
 
 $missing = @($requiredFiles | Where-Object { -not (Test-Path -LiteralPath (Join-Path $root $_)) })
@@ -151,11 +153,16 @@ $hasUnitSeeds = Test-Text $data 'unitSeeds\s*:'
 $hasManySeedArrays = ([regex]::Matches($data, '\[[^\]]+\]').Count -ge 40)
 
 Add-Score $rows "content" "school levels" 4 ($schools.Count -ge 3) "$($schools.Count) levels"
-Add-Score $rows "content" "subject breadth" 4 ($subjects.Count -ge 45) "$($subjects.Count) subjects"
-Add-Score $rows "content" "subject profiles" 4 ($profileNames.Count -ge 35) "$($profileNames.Count) profiles"
+Add-Score $rows "content" "subject breadth" 3 ($subjects.Count -ge 45) "$($subjects.Count) subjects"
+Add-Score $rows "content" "subject profiles" 3 ($profileNames.Count -ge 35) "$($profileNames.Count) profiles"
 Add-Score $rows "content" "curriculum versions" 3 ($has2022 -and $has2015) "2015/2022"
 Add-Score $rows "content" "question categories" 3 $hasQuestionCategories "4 categories"
 Add-Score $rows "content" "unit seeds" 2 ($hasUnitSeeds -and $hasManySeedArrays) "unit seeds"
+$hasContentAudit = Test-Path -LiteralPath (Join-Path $root "scripts/content-integrity-audit.ps1")
+$hasContentReport = Test-Path -LiteralPath (Join-Path $root "docs/content-integrity-report.md")
+$contentReport = if ($hasContentReport) { Get-Content -Encoding UTF8 -Raw (Join-Path $root "docs/content-integrity-report.md") } else { "" }
+$hasContentPass = ($contentReport -match 'Result: PASS' -and $contentReport -match '500000 content combinations')
+Add-Score $rows "content" "content integrity audit" 2 ($hasContentAudit -and $hasContentPass) "500000 content combinations"
 
 $hasBreakpoint860 = Test-Text $styles "@media \(max-width: 860px\)"
 $hasBreakpoint540 = Test-Text $styles "@media \(max-width: 540px\)"
