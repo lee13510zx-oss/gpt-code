@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#summary">본문으로 건너뛰기</a>
     <div id="app" class="app-shell">
       <header class="topbar">
         <div>
@@ -125,9 +126,9 @@
             <table>
               <thead>
                 <tr>
-                  <th>구분</th>
-                  <th>핵심 내용</th>
-                  <th>학습 포인트</th>
+                  <th scope="col">구분</th>
+                  <th scope="col">핵심 내용</th>
+                  <th scope="col">학습 포인트</th>
                 </tr>
               </thead>
               <tbody id="conceptTable"></tbody>
@@ -284,7 +285,7 @@
         </section>
       </main>
 
-      <footer class="bottom-nav">
+      <footer class="bottom-nav" aria-label="빠른 이동">
         <button data-view="summary" class="active">홈</button>
         <button data-view="explore">탐색</button>
         <button data-view="questions">문제</button>
