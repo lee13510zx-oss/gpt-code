@@ -19,10 +19,12 @@ $requiredFiles = @(
   "docs/ui-interaction-report.md",
   "docs/browser-runtime-report.md",
   "docs/operations-risk-report.md",
+  "docs/deployment-preflight-report.md",
   "scripts/quality-audit.ps1",
   "scripts/ui-interaction-audit.ps1",
   "scripts/browser-runtime-audit.ps1",
-  "scripts/operations-risk-audit.ps1"
+  "scripts/operations-risk-audit.ps1",
+  "scripts/deployment-preflight-audit.ps1"
 )
 
 $missing = @()
@@ -44,6 +46,8 @@ $hasBrowserAudit = Test-Path -LiteralPath (Join-Path $root "scripts/browser-runt
 $hasBrowserReport = Test-Path -LiteralPath (Join-Path $root "docs/browser-runtime-report.md")
 $hasOperationsAudit = Test-Path -LiteralPath (Join-Path $root "scripts/operations-risk-audit.ps1")
 $hasOperationsReport = Test-Path -LiteralPath (Join-Path $root "docs/operations-risk-report.md")
+$hasDeploymentAudit = Test-Path -LiteralPath (Join-Path $root "scripts/deployment-preflight-audit.ps1")
+$hasDeploymentReport = Test-Path -LiteralPath (Join-Path $root "docs/deployment-preflight-report.md")
 
 $checks = @(
   @{ Name = "Required files"; Pass = ($missing.Count -eq 0); Detail = if ($missing.Count) { "Missing: $($missing -join ', ')" } else { "All present" } },
@@ -55,7 +59,8 @@ $checks = @(
   @{ Name = "Quality audit"; Pass = ($hasQualityAudit -and $hasQualityReport); Detail = "Quality score and simulation" },
   @{ Name = "UI interaction audit"; Pass = ($hasUiAudit -and $hasUiReport); Detail = "Touch and navigation simulation" },
   @{ Name = "Browser runtime audit"; Pass = ($hasBrowserAudit -and $hasBrowserReport); Detail = "Real browser runtime simulation" },
-  @{ Name = "Operations risk audit"; Pass = ($hasOperationsAudit -and $hasOperationsReport); Detail = "Users, revenue, free-operation risk" }
+  @{ Name = "Operations risk audit"; Pass = ($hasOperationsAudit -and $hasOperationsReport); Detail = "Users, revenue, free-operation risk" },
+  @{ Name = "Deployment preflight audit"; Pass = ($hasDeploymentAudit -and $hasDeploymentReport); Detail = "Netlify and function deploy risk" }
 )
 
 foreach ($check in $checks) {
