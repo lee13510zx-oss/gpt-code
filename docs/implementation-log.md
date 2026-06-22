@@ -95,3 +95,14 @@
 - Performance/resilience audit result: 100/100, 94.24 KB runtime bundle, 500000 scenarios, 0 failures.
 - Quality audit result after the new gate: 100/100, 500000 iterations, 0 failures, 10/10 consecutive scores above 85.
 - Static check result after the new gate: all checks PASS, including performance resilience audit.
+
+## 2026-06-22 content integrity audit update
+
+- Added `scripts/content-integrity-audit.ps1`.
+- Added `docs/content-integrity-report.md`.
+- Checked school catalog breadth, curriculum coverage, direct subject profile coverage, fallback safety, profile field completeness, unit seed breadth, question category/template/format coverage, generated material sections, copyright-safe posture, user input escaping, and runtime self-check data keys.
+- Added the content integrity audit to `scripts/static-check.ps1`.
+- Added the content integrity audit to `scripts/quality-audit.ps1` while keeping the score model at 100 total points.
+- Content integrity audit result: 100/100, 3 school levels, 49 subjects, 43 profiles, 500000 content combinations, 0 failures.
+- Quality audit result after the new gate: 100/100, 500000 iterations, 0 failures, 10/10 consecutive scores above 85.
+- Static check result after the new gate: all checks PASS, including content integrity audit.
